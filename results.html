@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            /* Core Colors */
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #93c5fd;
+            
+            /* Neutral Colors */
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-200: #e2e8f0;
+            --neutral-300: #cbd5e1;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1e293b;
+            
+            /* Status Colors */
+            --success: #059669;
+            --warning: #eab308;
+            --danger: #dc2626;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+            /* Results specific */
+            --score-circle-size: 200px;
+            --score-circle-border: 8px;
+        }
+
+        body {
+            background: var(--neutral-50);
+            min-height: 100vh;
+        }
+
+        /* Modern Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            padding: 1rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        /* Fixed Score Circle */
+        .score-circle {
+            width: var(--score-circle-size);
+            height: var(--score-circle-size);
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem auto;
+            position: relative;
+            box-shadow: 
+                0 10px 25px rgba(37, 99, 235, 0.3),
+                0 20px 48px rgba(37, 99, 235, 0.2);
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            inset: calc(var(--score-circle-border) - 2px);
+            border-radius: 50%;
+            background: white;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-text {
+            position: relative;
+            z-index: 1;
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0.25rem;
+        }
+
+        .score-label {
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--neutral-700);
+            text-align: center;
+            line-height: 1.4;
+            padding: 0 1rem;
+        }
+
+        .score-label small {
+            display: block;
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+            opacity: 0.9;
+        }
+
+        /* Modern Stats Box */
+        .stats-box {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            border: 1px solid var(--neutral-200);
+        }
+
+        .stats-box:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stats-label {
+            color: var(--neutral-600);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            line-height: 1.2;
+        }
+
+        /* Enhanced Review Items */
+        .review-item {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 2rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--neutral-200);
+            transition: all 0.2s ease;
+        }
+
+        .review-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .review-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-light);
+        }
+
+        .review-item:hover::before {
+            opacity: 1;
+        }
+
+        .review-item.correct {
+            border-left: 5px solid var(--success);
+        }
+
+        .review-item.incorrect {
+            border-left: 5px solid var(--danger);
+        }
+
+        .review-item.unattempted {
+            border-left: 5px solid var(--neutral-400);
+        }
+
+        /* Modern Options */
+        .option-item {
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-item.user-selected {
+            background: rgba(220, 38, 38, 0.05);
+            border-color: var(--danger);
+        }
+
+        .option-item.correct-answer {
+            background: rgba(5, 150, 105, 0.05);
+            border-color: var(--success);
+        }
+
+        .option-item.user-selected.correct-answer {
+            background: rgba(5, 150, 105, 0.1);
+            border-color: var(--success);
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.1);
+        }
+
+        /* Enhanced Button */
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Time Header */
+        .time-spent-header {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: var(--neutral-50);
+            border-radius: 100px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            color: var(--neutral-700);
+        }
+
+        .time-value {
+            margin-left: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        /* Question Score Badge */
+        .question-score {
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+        }
+
+        .correct .question-score {
+            color: var(--success);
+            background: rgba(5, 150, 105, 0.1);
+        }
+
+        .incorrect .question-score {
+            color: var(--danger);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        .unattempted .question-score {
+            color: var(--neutral-600);
+            background: rgba(71, 85, 105, 0.1);
+        }
+
+        /* Category Badge */
+        .badge {
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 100px;
+            background: var(--primary-blue) !important;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Stats Container */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--neutral-600);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Options Review */
+        .options-review {
+            margin-top: 1.5rem;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        /* Navigation and Action Buttons */
+        .action-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-action {
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Start Test Button - No Hover Effect */
+        .btn-start-test {
+            background: var(--primary-blue);
+            color: white !important;
+            border: none;
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+            transition: none;
+        }
+
+        .btn-view-history {
+            background: var(--primary-blue);
+            color: white !important;
+            border: none;
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-view-history:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Icon in buttons */
+        .btn-action i {
+            font-size: 1.2rem;
+        }
+
+        /* Ensure visibility */
+        a.btn-action {
+            opacity: 1 !important;
+            visibility: visible !important;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">CAT Test Results</a>
+            <a href="CAT.html" class="btn btn-outline-light">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4 mb-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Test Summary</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="score-circle">
+                            <div class="score-text" id="scoreDisplay">0</div>
+                            <div class="score-label">Total Score</div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <div class="stats-box">
+                                    <div class="stats-label">Correct Answers</div>
+                                    <div class="stats-value" id="correctCount">0</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stats-box">
+                                    <div class="stats-label">Incorrect Answers</div>
+                                    <div class="stats-value" id="incorrectCount">0</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stats-box">
+                                    <div class="stats-label">Unattempted</div>
+                                    <div class="stats-value" id="unattemptedCount">0</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="stats-box">
+                                    <div class="stats-label">Average Time per Question</div>
+                                    <div class="stats-value" id="avgTime">0s</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="stats-box">
+                                    <div class="stats-label">Total Time Taken</div>
+                                    <div class="stats-value" id="totalTime">0m 0s</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Question Analysis</h4>
+                    </div>
+                    <div class="card-body" id="questionReview">
+                        <!-- Questions will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // Add this helper function for time formatting
+        function formatTime(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            let timeString = '';
+            if (hours > 0) {
+                timeString += `${hours}h `;
+            }
+            if (minutes > 0 || hours > 0) {
+                timeString += `${minutes}m `;
+            }
+            timeString += `${seconds}s`;
+            
+            return timeString.trim();
+        }
+
+        window.onload = function() {
+            let results;
+            
+            try {
+                // First try to get the current test results
+                const currentResults = localStorage.getItem('testResults');
+                
+                if (currentResults) {
+                    // We have just submitted a test
+                    results = JSON.parse(currentResults);
+                    // Store in session storage for refresh cases
+                    sessionStorage.setItem('currentViewingTest', currentResults);
+                    // Clear from localStorage to prevent showing again
+                    localStorage.removeItem('testResults');
+                } else {
+                    // Check if we're viewing a specific test from history
+                    const selectedTestTimestamp = localStorage.getItem('selectedTestTimestamp');
+                    
+                    if (selectedTestTimestamp) {
+                        // Load specific test from history
+                        const testHistory = JSON.parse(localStorage.getItem('testHistory')) || [];
+                        results = testHistory.find(test => test.timestamp === selectedTestTimestamp);
+                        sessionStorage.setItem('currentViewingTest', JSON.stringify(results));
+                        localStorage.removeItem('selectedTestTimestamp');
+                    } else {
+                        // Try to load from session storage (for refresh cases)
+                        const savedTest = sessionStorage.getItem('currentViewingTest');
+                        if (savedTest) {
+                            results = JSON.parse(savedTest);
+                        }
+                    }
+                }
+
+                if (!results) {
+                    throw new Error('No test results found');
+                }
+
+                // Update summary statistics
+                document.getElementById('scoreDisplay').textContent = results.score;
+                document.getElementById('correctCount').textContent = results.correctCount;
+                document.getElementById('incorrectCount').textContent = results.incorrectCount;
+                document.getElementById('unattemptedCount').textContent = results.unattemptedCount;
+
+                // Format time display
+                document.getElementById('totalTime').textContent = formatTime(results.timeSpent);
+
+                // Calculate and display average time
+                const attemptedQuestions = results.correctCount + results.incorrectCount;
+                const avgTime = attemptedQuestions > 0 ? 
+                    Math.round(results.timeSpent / attemptedQuestions) : 0;
+                document.getElementById('avgTime').textContent = formatTime(avgTime);
+
+                // Add category display
+                if (results.category) {
+                    document.querySelector('.score-label').innerHTML = 
+                        `Total Score<br><small class="text-muted">${results.category} Category</small>`;
+                }
+
+                // Generate question review
+                generateQuestionReview(results);
+
+            } catch (error) {
+                console.error('Error loading results:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error loading test results. Redirecting to home page.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = 'CAT.html';
+                });
+            }
+        };
+
+        function generateQuestionReview(results) {
+            const reviewContainer = document.getElementById('questionReview');
+            reviewContainer.innerHTML = ''; // Clear existing content
+
+            results.questions.forEach((question, index) => {
+                const userAnswer = results.answers[index];
+                const isCorrect = userAnswer === question.correctAnswer;
+                const status = userAnswer === null ? 'unattempted' : (isCorrect ? 'correct' : 'incorrect');
+                
+                const questionDiv = document.createElement('div');
+                questionDiv.className = `review-item ${status}`;
+                
+                const timeSpent = results.questionTimes[index] || 0;
+                
+                questionDiv.innerHTML = `
+                    <div class="time-spent-header">
+                        Time Spent: <span class="time-value">${formatTime(timeSpent)}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0">
+                            <span class="badge bg-secondary me-2">${question.category}</span>
+                            Question ${index + 1}
+                        </h5>
+                        <div class="question-score">
+                            ${isCorrect ? '+3' : (userAnswer === null ? '0' : '-1')}
+                        </div>
+                    </div>
+                    <p>${question.text}</p>
+                    <div class="options-review">
+                        ${question.options.map((option, optIndex) => `
+                            <div class="option-item ${optIndex === userAnswer ? 'user-selected' : ''} 
+                                                   ${optIndex === question.correctAnswer ? 'correct-answer' : ''}">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                reviewContainer.appendChild(questionDiv);
+            });
+        }
+    </script>
+</body>
+</html> 

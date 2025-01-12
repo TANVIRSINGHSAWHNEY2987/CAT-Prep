@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test History - CAT Prep</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            /* Core Colors */
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #93c5fd;
+            
+            /* Neutral Colors */
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-200: #e2e8f0;
+            --neutral-300: #cbd5e1;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1e293b;
+            
+            /* Status Colors */
+            --success: #059669;
+            --warning: #eab308;
+            --danger: #dc2626;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+            /* Category Colors */
+            --quants-bg: rgba(5, 150, 105, 0.1);
+            --varc-bg: rgba(37, 99, 235, 0.1);
+            --lrdi-bg: rgba(220, 38, 38, 0.1);
+        }
+
+        body {
+            background: var(--neutral-50);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            padding: 1rem 0;
+        }
+
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg ... %3E"); /* Pattern overlay */
+            opacity: 0.1;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+
+        .history-card {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--neutral-200);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .category-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--neutral-200);
+        }
+
+        .stat-pill {
+            padding: 1rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s ease;
+            min-width: 180px;
+        }
+
+        .stat-pill:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-pill.quants {
+            background: var(--quants-bg);
+            color: var(--success);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .stat-pill.varc {
+            background: var(--varc-bg);
+            color: var(--primary-blue);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .stat-pill.lrdi {
+            background: var(--lrdi-bg);
+            color: var(--danger);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .score-circle {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            font-weight: 700;
+            font-size: 1.75rem;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            position: relative;
+            margin-right: 1.5rem;
+        }
+
+        .score-circle::after {
+            content: 'Score';
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--neutral-600);
+        }
+
+        .time-badge {
+            background: var(--neutral-50);
+            padding: 0.75rem 1.25rem;
+            border-radius: 100px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .time-badge i {
+            color: var(--primary-blue);
+        }
+
+        .empty-history {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .empty-history i {
+            font-size: 4.5rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .empty-history h3 {
+            color: var(--neutral-800);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .empty-history p {
+            color: var(--neutral-600);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outline-light {
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #991b1b);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 500;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+        }
+
+        .btn-danger:active {
+            transform: translateY(1px);
+        }
+
+        /* Button click animation */
+        .btn-danger:active, .btn-outline-danger:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2);
+        }
+
+        /* Ripple effect */
+        .btn::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+
+        .btn:active::after {
+            transform: scale(0, 0);
+            opacity: .3;
+            transition: 0s;
+        }
+
+        /* Fade in animation for delete selected button */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #deleteSelectedBtn {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .btn-outline-danger {
+            border: 2px solid #dc2626;
+            color: #dc2626;
+            background: transparent;
+            transition: all 0.3s ease;
+            border-radius: 100px !important;
+        }
+
+        .btn-outline-danger:hover {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+        }
+
+        .btn-group .btn {
+            margin-right: 0.5rem;
+            border-radius: 100px !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-badge {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        .category-pill {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .category-pill.quants {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success);
+        }
+
+        .category-pill.varc {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-blue);
+        }
+
+        .category-pill.lrdi {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--danger);
+        }
+
+        /* Test Info */
+        .test-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .test-date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .test-category {
+            font-size: 0.95rem;
+            color: var(--neutral-600);
+            margin-top: 0.25rem;
+        }
+
+        /* Stats Value */
+        .stat-value {
+            font-weight: 700;
+            color: inherit;
+        }
+
+        /* Responsive Improvements */
+        @media (max-width: 768px) {
+            .history-card {
+                padding: 1.5rem;
+            }
+            
+            .category-stats {
+                gap: 0.75rem;
+            }
+            
+            .stat-pill {
+                min-width: 150px;
+                padding: 0.75rem 1rem;
+            }
+            
+            .score-circle {
+                width: 70px;
+                height: 70px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="CAT.html">CAT Prep</a>
+            <a href="CAT.html" class="btn btn-outline-light">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Test History</h2>
+            <div class="btn-group">
+                <button class="btn btn-outline-danger me-2" id="deleteSelectedBtn" onclick="deleteSelectedHistory()" style="display: none;">
+                    <i class="fas fa-trash"></i> Delete Selected
+                </button>
+                <button class="btn btn-danger" onclick="deleteAllHistory()">
+                    <i class="fas fa-trash-alt"></i> Delete All History
+                </button>
+            </div>
+        </div>
+        <div id="historyList"></div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            displayHistory();
+        }
+
+        function displayHistory() {
+            const historyContainer = document.getElementById('historyList');
+            const testHistory = JSON.parse(localStorage.getItem('testHistory')) || [];
+
+            if (testHistory.length === 0) {
+                historyContainer.innerHTML = `
+                    <div class="empty-history">
+                        <i class="fas fa-history"></i>
+                        <h4>No Test History</h4>
+                        <p class="text-muted">Take a test to see your history here</p>
+                        <a href="CAT.html" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Start a Test
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            historyContainer.innerHTML = ''; // Clear existing content
+
+            testHistory.forEach(test => {
+                const card = document.createElement('div');
+                card.className = 'card history-card';
+
+                // Calculate category-wise statistics
+                const categoryStats = {
+                    QUANTS: { total: 0, correct: 0 },
+                    VARC: { total: 0, correct: 0 },
+                    LRDI: { total: 0, correct: 0 }
+                };
+
+                test.questions.forEach((q, idx) => {
+                    const category = q.category;
+                    if (categoryStats[category]) {
+                        categoryStats[category].total++;
+                        if (test.answers[idx] === q.correctAnswer) {
+                            categoryStats[category].correct++;
+                        }
+                    }
+                });
+
+                const date = new Date(test.timestamp);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                card.innerHTML = `
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="checkbox" class="form-check-input history-checkbox" data-timestamp="${test.timestamp}">
+                                <div>
+                                    <h5 class="card-title mb-1">${test.category} Test</h5>
+                                    <div class="text-muted small">${formattedDate}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="time-badge">
+                                    <i class="far fa-clock"></i>
+                                    ${Math.floor(test.timeSpent / 60)}m ${test.timeSpent % 60}s
+                                </div>
+                                <div class="score-circle">${test.score}</div>
+                            </div>
+                        </div>
+                        <div class="category-stats">
+                            ${Object.entries(categoryStats).map(([category, stats]) => `
+                                <div class="stat-pill ${category.toLowerCase()}">
+                                    <i class="fas fa-chart-bar"></i>
+                                    ${category}: ${stats.correct}/${stats.total}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="mt-3 text-end">
+                            <button class="btn btn-outline-primary btn-sm" onclick="viewTestDetails('${test.timestamp}')">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                historyContainer.appendChild(card);
+            });
+
+            // Add event listeners to checkboxes after creating all cards
+            document.querySelectorAll('.history-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const hasChecked = document.querySelectorAll('.history-checkbox:checked').length > 0;
+                    document.getElementById('deleteSelectedBtn').style.display = hasChecked ? 'inline-block' : 'none';
+                });
+            });
+        }
+
+        function viewTestDetails(timestamp) {
+            // Clear any previously stored test
+            sessionStorage.removeItem('currentViewingTest');
+            // Store the selected test timestamp
+            localStorage.setItem('selectedTestTimestamp', timestamp);
+            // Redirect to results page
+            window.location.href = 'results.html';
+        }
+
+        function deleteAllHistory() {
+            if (confirm('Are you sure you want to delete all test history? This action cannot be undone.')) {
+                localStorage.removeItem('testHistory');
+                displayHistory();
+            }
+        }
+
+        function deleteSelectedHistory() {
+            if (confirm('Are you sure you want to delete selected test history?')) {
+                const selectedCheckboxes = document.querySelectorAll('.history-checkbox:checked');
+                const testHistory = JSON.parse(localStorage.getItem('testHistory')) || [];
+                
+                const timestampsToDelete = Array.from(selectedCheckboxes).map(cb => cb.dataset.timestamp);
+                const updatedHistory = testHistory.filter(test => !timestampsToDelete.includes(test.timestamp));
+                
+                localStorage.setItem('testHistory', JSON.stringify(updatedHistory));
+                displayHistory();
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            /* Core Colors */
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #93c5fd;
+            
+            /* Neutral Colors */
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-200: #e2e8f0;
+            --neutral-300: #cbd5e1;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1e293b;
+            
+            /* Status Colors */
+            --success: #059669;
+            --warning: #eab308;
+            --danger: #dc2626;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+            /* Timer specific */
+            --timer-warning-bg: rgba(220, 38, 38, 0.2);
+            --timer-warning-border: rgba(220, 38, 38, 0.3);
+            --timer-normal-bg: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            background: var(--neutral-50);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            padding: 1rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .timer-display {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            color: white;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .timer-display.warning {
+            background: rgba(220, 38, 38, 0.2);
+            border-color: rgba(220, 38, 38, 0.3);
+            color: #fecaca;
+            animation: pulse 1s infinite;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            border: none;
+            margin: 2rem 0;
+        }
+
+        .option {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            margin: 0.5rem 0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background: var(--neutral-100);
+            border-color: var(--primary-blue);
+        }
+
+        .option.selected {
+            background: rgba(37, 99, 235, 0.1);
+            border-color: var(--primary-blue);
+        }
+
+        .progress {
+            height: 0.5rem;
+            background: var(--neutral-200);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+        }
+
+        .navigation-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">CAT Test</a>
+            <div class="ms-auto">
+                <div id="timer" class="timer-display">00:00</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="card"
+        >
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Question <span id="currentQuestionNum">1</span>/<span id="totalQuestions"></span></h5>
+                    <span class="badge bg-primary" id="questionCategory"></span>
+                </div>
+                <div class="progress mt-2">
+                    <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p id="questionText" class="card-text"></p>
+                <div id="options" class="options-container"></div>
+                <div class="d-flex justify-content-between mt-4">
+                    <button class="btn btn-outline-primary" onclick="previousQuestion()">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn btn-primary" onclick="submitTest()">
+                        <i class="fas fa-check-circle"></i> Submit Test
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="nextQuestion()">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+    <script>
+        let currentQuestion = 0;
+        let questions = [];
+        let answers = [];
+        let timeLeft = 0;
+        let timerId = null;
+        let lastTimerUpdate = null;
+        let questionStartTime;
+        let questionTimes = [];
+
+        window.onload = function() {
+            // Load test questions from localStorage
+            questions = JSON.parse(localStorage.getItem('testQuestions')) || [];
+            const duration = parseInt(localStorage.getItem('testDuration')) || 60; // default 60 minutes
+            
+            if (questions.length === 0) {
+                Swal.fire({
+                    title: 'No Questions Found',
+                    text: 'Please start a new test.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = 'CAT.html';
+                });
+                return;
+            }
+
+            // Load saved answers and current question
+            answers = JSON.parse(localStorage.getItem('savedAnswers')) || new Array(questions.length).fill(null);
+            currentQuestion = parseInt(localStorage.getItem('currentQuestion')) || 0;
+            
+            // Initialize timer
+            const savedTimeLeft = localStorage.getItem('timeLeft');
+            const savedLastUpdate = localStorage.getItem('lastTimerUpdate');
+            const testDuration = parseInt(localStorage.getItem('testDuration')) || 60;
+            
+            if (!savedTimeLeft || !savedLastUpdate) {
+                // First time starting the test
+                timeLeft = testDuration * 60; // Convert minutes to seconds
+                localStorage.setItem('timeLeft', timeLeft);
+                localStorage.setItem('lastTimerUpdate', Date.now());
+            } else {
+                // Resuming the test
+                const timeElapsed = Math.floor((Date.now() - parseInt(savedLastUpdate)) / 1000);
+                timeLeft = Math.max(0, parseInt(savedTimeLeft) - timeElapsed);
+            }
+            
+            // Initialize the UI
+            document.getElementById('totalQuestions').textContent = questions.length;
+            updateTimer(); // Update timer display immediately
+            displayQuestion();
+            updateQuestionCount();
+            addButtonStyles();
+
+            // Start timer
+            startTimer();
+
+            // Add confirmation before leaving the page
+            window.addEventListener('beforeunload', function(e) {
+                if (timeLeft > 0) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+        };
+
+        function startTimer() {
+            if (timerId) {
+                clearInterval(timerId); // Clear any existing timer
+            }
+
+            lastTimerUpdate = Date.now();
+            localStorage.setItem('lastTimerUpdate', lastTimerUpdate);
+            
+            timerId = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    submitTest();
+                    return;
+                }
+                
+                timeLeft--;
+                localStorage.setItem('timeLeft', timeLeft);
+                localStorage.setItem('lastTimerUpdate', Date.now());
+                updateTimer();
+            }, 1000);
+        }
+
+        function updateTimer() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            const timerDisplay = document.getElementById('timer');
+            if (timerDisplay) {
+                let timeString = '';
+                if (hours > 0) {
+                    timeString += `${String(hours).padStart(2, '0')}:`;
+                }
+                timeString += `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                timerDisplay.textContent = timeString;
+                
+                // Add warning class and styles for last 5 minutes
+                if (timeLeft <= 300) {
+                    timerDisplay.classList.add('warning');
+                    // Add additional emphasis for last minute
+                    if (timeLeft <= 60) {
+                        timerDisplay.style.fontSize = '1.7rem';
+                    } else {
+                        timerDisplay.style.fontSize = '1.5rem';
+                    }
+                } else {
+                    timerDisplay.classList.remove('warning');
+                    timerDisplay.style.fontSize = '1.5rem';
+                }
+            }
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            
+            document.getElementById('questionText').textContent = question.text;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            if (Array.isArray(question.options)) {
+                question.options.forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    if (answers[currentQuestion] === index) {
+                        optionDiv.classList.add('selected');
+                    }
+                    
+                    optionDiv.innerHTML = `
+                        <input type="radio" 
+                               name="question" 
+                               id="option${index}" 
+                               ${answers[currentQuestion] === index ? 'checked' : ''}>
+                        <label for="option${index}">${option}</label>
+                    `;
+                    
+                    // Single click handler for the entire option div
+                    optionDiv.onclick = (e) => {
+                        selectOption(index);
+                    };
+                    
+                    optionsContainer.appendChild(optionDiv);
+                });
+            }
+            
+            // Update other elements...
+            document.getElementById('currentQuestionNum').textContent = currentQuestion + 1;
+            const categoryBadge = document.getElementById('questionCategory');
+            categoryBadge.textContent = question.category;
+            categoryBadge.setAttribute('data-category', question.category);
+            
+            const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progressPercentage}%`;
+            
+            questionStartTime = Date.now();
+        }
+
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            // Save answers to localStorage
+            localStorage.setItem('savedAnswers', JSON.stringify(answers));
+            displayQuestion();
+        }
+
+        function updateQuestionCount() {
+            document.getElementById('currentQuestionNum').textContent = currentQuestion + 1;
+            document.getElementById('totalQuestions').textContent = questions.length;
+            const progressPercentage = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progressPercentage}%`;
+        }
+
+        function previousQuestion() {
+            saveQuestionTime();
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                // Save current question position
+                localStorage.setItem('currentQuestion', currentQuestion);
+                displayQuestion();
+                updateQuestionCount();
+            }
+        }
+
+        function nextQuestion() {
+            saveQuestionTime();
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                // Save current question position
+                localStorage.setItem('currentQuestion', currentQuestion);
+                displayQuestion();
+                updateQuestionCount();
+            }
+        }
+
+        function saveQuestionTime() {
+            const timeSpent = Math.round((Date.now() - questionStartTime) / 1000);
+            questionTimes[currentQuestion] = timeSpent;
+        }
+
+        async function showConfirm(message) {
+            const result = await Swal.fire({
+                text: message,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                confirmButtonColor: '#1a73e8',
+                cancelButtonColor: '#dc3545',
+                background: '#ffffff',
+                customClass: {
+                    container: 'custom-swal-container',
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    confirmButton: 'custom-swal-button',
+                    cancelButton: 'custom-swal-cancel-button'
+                }
+            });
+            return result.isConfirmed;
+        }
+
+        async function showAlert(message, type = 'info') {
+            return await Swal.fire({
+                text: message,
+                icon: type, // 'success', 'error', 'warning', 'info', 'question'
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#1a73e8',
+                background: '#ffffff',
+                customClass: {
+                    container: 'custom-swal-container',
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    confirmButton: 'custom-swal-button'
+                }
+            });
+        }
+
+        async function submitTest() {
+            try {
+                // Ask for confirmation
+                const confirmResult = await Swal.fire({
+                    title: 'Submit Test?',
+                    text: 'Are you sure you want to submit the test?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                    confirmButtonColor: '#1a73e8',
+                    cancelButtonColor: '#dc3545'
+                });
+
+                if (!confirmResult.isConfirmed) {
+                    return;
+                }
+
+                // Clear any existing results first
+                localStorage.removeItem('testResults');
+                sessionStorage.removeItem('currentViewingTest');
+
+                // Stop timer and calculate results
+                if (timerId) {
+                    clearInterval(timerId);
+                    timerId = null;
+                }
+
+                // Save final question time
+                saveQuestionTime();
+
+                // Calculate total time spent
+                const testDuration = parseInt(localStorage.getItem('testDuration')) * 60;
+                const totalTimeSpent = testDuration - timeLeft;
+
+                // Calculate score and statistics
+                let score = 0;
+                let correctCount = 0;
+                let incorrectCount = 0;
+                let unattemptedCount = 0;
+
+                questions.forEach((question, index) => {
+                    if (answers[index] === null || answers[index] === undefined) {
+                        unattemptedCount++;
+                    } else if (answers[index] === question.correctAnswer) {
+                        correctCount++;
+                        score += 3; // +3 for correct answer
+                    } else {
+                        incorrectCount++;
+                        score -= 1; // -1 for wrong answer
+                    }
+                });
+
+                // Ensure score doesn't go below 0
+                score = Math.max(0, score);
+
+                // Create results object
+                const results = {
+                    score: score,
+                    totalQuestions: questions.length,
+                    answers: answers,
+                    questions: questions.map(q => ({
+                        text: q.text,
+                        options: q.options,
+                        correctAnswer: q.correctAnswer,
+                        category: q.category
+                    })),
+                    questionTimes: questionTimes,
+                    timeSpent: totalTimeSpent,
+                    category: localStorage.getItem('testCategory') || 'Mixed',
+                    correctCount: correctCount,
+                    incorrectCount: incorrectCount,
+                    unattemptedCount: unattemptedCount,
+                    timestamp: new Date().toISOString()
+                };
+
+                // Save results
+                localStorage.setItem('testResults', JSON.stringify(results));
+                
+                // Add to history
+                const testHistory = JSON.parse(localStorage.getItem('testHistory')) || [];
+                testHistory.push(results);
+                localStorage.setItem('testHistory', JSON.stringify(testHistory));
+
+                // Clear test data
+                const keysToRemove = [
+                    'timeLeft',
+                    'lastTimerUpdate',
+                    'currentQuestion',
+                    'savedAnswers',
+                    'testQuestions',
+                    'testDuration',
+                    'testCategory',
+                    'questionTimes'
+                ];
+                
+                keysToRemove.forEach(key => {
+                    localStorage.removeItem(key);
+                });
+
+                // Redirect to results page
+                window.location.href = 'results.html';
+
+            } catch (error) {
+                console.error('Error submitting test:', error);
+                await Swal.fire({
+                    title: 'Error',
+                    text: 'There was an error submitting your test. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+
+        function addButtonStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .btn {
+                    padding: 0.5rem 1.5rem;
+                    border-radius: 120px;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                }
+
+                .btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+
+                .btn i {
+                    margin-right: 0.5rem;
+                }
+
+                .btn i:last-child {
+                    margin-right: 0;
+                    margin-left: 0.5rem;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (timerId) {
+                    clearInterval(timerId);
+                    timerId = null;
+                    localStorage.setItem('timeLeft', timeLeft);
+                    localStorage.setItem('lastTimerUpdate', Date.now());
+                }
+            } else {
+                const savedTimeLeft = localStorage.getItem('timeLeft');
+                const lastUpdate = localStorage.getItem('lastTimerUpdate');
+                
+                if (savedTimeLeft && lastUpdate) {
+                    const timeElapsed = Math.floor((Date.now() - parseInt(lastUpdate)) / 1000);
+                    timeLeft = Math.max(0, parseInt(savedTimeLeft) - timeElapsed);
+                    
+                    if (timeLeft > 0) {
+                        startTimer();
+                    } else {
+                        submitTest();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

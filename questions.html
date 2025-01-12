@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Questions - CAT Question Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            /* Core Colors */
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #93c5fd;
+            
+            /* Neutral Colors */
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-200: #e2e8f0;
+            --neutral-300: #cbd5e1;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1e293b;
+            
+            /* Status Colors */
+            --success: #059669;
+            --warning: #eab308;
+            --danger: #dc2626;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+            /* Question specific */
+            --correct-answer-bg: rgba(5, 150, 105, 0.1);
+            --option-hover-bg: var(--neutral-100);
+        }
+
+        body {
+            background: var(--neutral-50);
+            min-height: 100vh;
+            color: var(--text-color);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .option {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .option:hover {
+            background: rgba(79, 70, 229, 0.05);
+            transform: translateX(8px);
+        }
+
+        .correct-answer {
+            border-left-color: var(--success-color);
+            background: rgba(5, 150, 105, 0.1);
+        }
+
+        .delete-btn {
+            color: var(--danger-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        .delete-btn:hover {
+            background: rgba(220, 38, 38, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .category-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .category-badge[data-category="QUANTS"] {
+            background: linear-gradient(135deg, var(--success), #047857);
+        }
+
+        .category-badge[data-category="LRDI"] {
+            background: linear-gradient(135deg, var(--danger), #991b1b);
+        }
+
+        .category-badge[data-category="VARC"] {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+        }
+
+        .form-select {
+            border-radius: 0.75rem;
+            border: 1px solid var(--neutral-300);
+            padding: 0.75rem 1rem;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: none;
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #1e40af;
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="CAT.html">CAT Prep</a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>All Questions</h2>
+            <button class="btn btn-danger" onclick="deleteAllQuestions()">
+                <i class="fas fa-trash-alt"></i> Delete All Questions
+            </button>
+        </div>
+        <div class="mb-4 d-flex align-items-center">
+            <select id="categoryFilter" class="form-select me-2" style="max-width: 200px;">
+                <option value="ALL">All Categories</option>
+                <option value="QUANTS">QUANTS</option>
+                <option value="LRDI">LRDI</option>
+                <option value="VARC">VARC</option>
+            </select>
+        </div>
+        <div id="questionsList"></div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            displayQuestions();
+            document.getElementById('categoryFilter').addEventListener('change', displayQuestions);
+        }
+
+        function displayQuestions() {
+            const questions = JSON.parse(localStorage.getItem('catQuestions')) || [];
+            const questionsContainer = document.getElementById('questionsList');
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            
+            console.log('All questions:', questions);
+            
+            questionsContainer.innerHTML = '';
+
+            const filteredQuestions = selectedCategory === 'ALL' 
+                ? questions 
+                : questions.filter(q => q.category === selectedCategory);
+
+            console.log('Filtered questions:', filteredQuestions);
+
+            filteredQuestions.forEach((question, index) => {
+                const card = document.createElement('div');
+                card.className = 'card question-card mb-3';
+                
+                console.log('Question category:', question.category);
+                
+                let optionsHtml = question.options.map((option, optIndex) => `
+                    <div class="option ${optIndex === question.correctAnswer ? 'correct-answer' : ''}">
+                        ${String.fromCharCode(65 + optIndex)}. ${option}
+                    </div>
+                `).join('');
+
+                const category = question.category || 'Uncategorized';
+                
+                card.innerHTML = `
+                    <div class="card-body">
+                        <i class="fas fa-trash delete-btn" onclick="deleteQuestion(${questions.indexOf(question)})"></i>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Question ${index + 1}</h5>
+                            <span class="badge bg-primary category-badge" data-category="${category}">${category}</span>
+                        </div>
+                        <p class="card-text">${question.text}</p>
+                        <div class="options-container">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+
+                questionsContainer.appendChild(card);
+            });
+
+            if (filteredQuestions.length === 0) {
+                questionsContainer.innerHTML = `
+                    <div class="alert alert-info">
+                        No questions found for ${selectedCategory === 'ALL' ? 'any category' : selectedCategory} category.
+                    </div>
+                `;
+            }
+        }
+
+        function deleteQuestion(index) {
+            if (confirm('Are you sure you want to delete this question?')) {
+                const questions = JSON.parse(localStorage.getItem('catQuestions')) || [];
+                questions.splice(index, 1);
+                localStorage.setItem('catQuestions', JSON.stringify(questions));
+                displayQuestions();
+            }
+        }
+
+        function deleteAllQuestions() {
+            if (confirm('Are you sure you want to delete all questions? This action cannot be undone.')) {
+                localStorage.removeItem('catQuestions');
+                displayQuestions();
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
