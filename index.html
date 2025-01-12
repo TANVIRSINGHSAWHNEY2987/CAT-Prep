@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT Question Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            /* Core Colors */
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #60a5fa;
+            --secondary-blue: #3b82f6;
+            --accent-blue: #93c5fd;
+            
+            /* Neutral Colors */
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-200: #e2e8f0;
+            --neutral-300: #cbd5e1;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1e293b;
+            
+            /* Status Colors */
+            --success: #059669;
+            --warning: #eab308;
+            --danger: #dc2626;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+            /* Keep existing variables */
+            --text-color: var(--neutral-800);
+            --light-bg: var(--neutral-50);
+            --border-color: var(--neutral-200);
+        }
+
+        body {
+            background: var(--neutral-50);
+            min-height: 100vh;
+            color: var(--neutral-800);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            padding: 1rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        .navbar .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar .nav-link:hover {
+            color: white !important;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            padding: 8rem 0;
+            position: relative;
+            overflow: hidden;
+            margin-top: -76px; /* Adjust based on navbar height */
+            padding-top: calc(8rem + 76px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .hero-content .lead {
+            font-size: 1.25rem;
+            font-weight: 500;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Question Count Badge */
+        #questionCount {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-header {
+            background: linear-gradient(to right, var(--neutral-50), white);
+            border-bottom: 1px solid var(--neutral-200);
+            padding: 1.5rem;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .card-header h4 {
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 1.75rem;
+            background: linear-gradient(to bottom, #ffffff, #f8fafc);
+            border-radius: 0 0 1.5rem 1.5rem;
+        }
+
+        /* Form Controls */
+        .form-control, .form-select {
+            background: white;
+            border: 1px solid var(--neutral-300);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--neutral-800);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: white;
+        }
+
+        .form-control::placeholder {
+            color: var(--neutral-600);
+        }
+
+        /* Fix textarea specific issues */
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Fix select dropdown */
+        select.form-control {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%234f46e5' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* Fix file input */
+        input[type="file"].form-control {
+            padding: 0.5rem;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        /* Update form buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 500;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        /* Fix category select specific styles */
+        #category {
+            width: 100%;
+            background-color: #ffffff;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem !important;
+            cursor: pointer;
+        }
+
+        #category:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        /* Update form layout */
+        .card-body form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .form-label {
+            color: var(--neutral-700);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .card-header h4 {
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        /* Fix option inputs spacing */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* Updated Navigation Buttons */
+        .nav-action-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: var(--primary-color);
+            color: white !important;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            border: 2px solid transparent;
+        }
+
+        .nav-action-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-action-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Add styles for the buttons container */
+        .nav-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-left: 1.5rem;
+        }
+
+        /* Form Control Styles */
+        .form-control, .form-select {
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background-color: var(--primary-blue);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: var(--light-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 1rem 1rem 0 0 !important;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border: none;
+            border-radius: 1.5rem;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.1),
+                0 20px 48px rgba(0, 0, 0, 0.1),
+                0 1px 4px rgba(0, 0, 0, 0.02);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .modal-header {
+            padding: 1.5rem 1.5rem 0.5rem;
+        }
+
+        .modal-title.gradient-text {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+
+        .category-btn {
+            background: white;
+            border: none;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            transform: translateZ(0);
+            cursor: pointer;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.05),
+                0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-btn:hover {
+            transform: translateY(-5px) translateZ(20px);
+            box-shadow: 
+                0 8px 12px rgba(0, 0, 0, 0.1),
+                0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.2);
+        }
+
+        .category-btn span {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        /* Category specific styles */
+        .all-btn .category-icon {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+        }
+
+        .varc-btn .category-icon {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+        }
+
+        .lrdi-btn .category-icon {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .quants-btn .category-icon {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        /* Modal animation */
+        .modal.fade .modal-dialog {
+            transform: scale(0.95) translateY(-30px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .modal.show .modal-dialog {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Close button */
+        .btn-close {
+            background-color: var(--light-bg);
+            padding: 0.75rem;
+            border-radius: 50%;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+            background-color: var(--border-color);
+            transform: rotate(90deg);
+        }
+
+        /* Dark Mode Styles */
+        :root {
+            /* Light Mode Variables */
+            --bg-color: #f8fafc;
+            --text-color: #1f2937;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode Variables */
+            --bg-color: #1a1a1a;
+            --text-color: #e5e7eb;
+            --card-bg: #2d2d2d;
+            --border-color: #404040;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Dark Mode Transitions */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Dark Mode Card Styles */
+        .card {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+        }
+
+        /* Dark Mode Form Controls */
+        .form-control, .form-select {
+            background-color: var(--card-bg);
+            border-color: var(--border-color);
+            color: var(--text-color);
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        /* Dark Mode Toggle Button */
+        .theme-toggle {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dark mode specific navbar styles */
+        [data-theme="dark"] .navbar {
+            background-color: #2d2d2d;
+        }
+
+        [data-theme="dark"] .nav-link {
+            color: var(--text-color) !important;
+        }
+
+        /* File Input Styles */
+        .file-upload-container {
+            background: white;
+            border: 2px dashed var(--neutral-300);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-container:hover {
+            border-color: var(--primary-blue);
+            background: var(--neutral-50);
+        }
+
+        input[type="file"].form-control {
+            padding: 0.75rem;
+            background: white;
+            cursor: pointer;
+            border: 1px solid var(--neutral-300);
+        }
+
+        /* Form Validation Styles */
+        .form-control.is-valid {
+            border-color: var(--success);
+            background-color: white;
+        }
+
+        .form-control.is-invalid {
+            border-color: var(--danger);
+            background-color: white;
+        }
+
+        .invalid-feedback {
+            color: var(--danger);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">CAT Prep</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <span id="questionCount" class="badge rounded-pill bg-light text-dark">
+                                0 Questions
+                            </span>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="questions.html">All Questions</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            1 Hour Test
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(60, 6)">6 Questions</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(60, 12)">12 Questions</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(60, 18)">18 Questions</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(60, 24)">24 Questions</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            2 Hour Test
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(120, 30)">30 Questions</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(120, 36)">36 Questions</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(120, 42)">42 Questions</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            3 Hour Test
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(180, 48)">48 Questions</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(180, 54)">54 Questions</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(180, 60)">60 Questions</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showCategoryModal(180, 66)">66 Questions</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="nav-actions">
+                <a href="performance.html" class="nav-action-btn">
+                    <i class="fas fa-chart-line"></i> Performance
+                </a>
+                <a href="history.html" class="nav-action-btn">
+                    <i class="fas fa-history"></i> History
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Master Your CAT Preparation</h1>
+                <p class="lead">Practice with our comprehensive question bank and track your progress with detailed analytics. Take mock tests and improve your performance.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0">Upload Single Question</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="questionForm">
+                            <div class="mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="QUANTS">Quantitative Aptitude</option>
+                                    <option value="LRDI">Logical Reasoning & Data Interpretation</option>
+                                    <option value="VARC">Verbal Ability & Reading Comprehension</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Question</label>
+                                <textarea class="form-control" id="question" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Options</label>
+                                <input type="text" class="form-control mb-2" id="option1" placeholder="Option 1" required>
+                                <input type="text" class="form-control mb-2" id="option2" placeholder="Option 2" required>
+                                <input type="text" class="form-control mb-2" id="option3" placeholder="Option 3" required>
+                                <input type="text" class="form-control mb-2" id="option4" placeholder="Option 4" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Correct Answer</label>
+                                <select class="form-select" id="correctAnswer" required>
+                                    <option value="1">Option 1</option>
+                                    <option value="2">Option 2</option>
+                                    <option value="3">Option 3</option>
+                                    <option value="4">Option 4</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Question
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">Upload Word File</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="fileForm">
+                            <div class="mb-3">
+                                <label class="form-label">Select Word File</label>
+                                <input type="file" class="form-control" id="wordFile" accept=".doc,.docx" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-file-upload"></i> Upload File
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="categoryModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title gradient-text">Select Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="category-grid">
+                        <button class="category-btn all-btn" onclick="startTestWithCategory('ALL')">
+                            <div class="category-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <span>All Categories</span>
+                        </button>
+                        <button class="category-btn varc-btn" onclick="startTestWithCategory('VARC')">
+                            <div class="category-icon">
+                                <i class="fas fa-book-reader"></i>
+                            </div>
+                            <span>VARC</span>
+                        </button>
+                        <button class="category-btn lrdi-btn" onclick="startTestWithCategory('LRDI')">
+                            <div class="category-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <span>LRDI</span>
+                        </button>
+                        <button class="category-btn quants-btn" onclick="startTestWithCategory('QUANTS')">
+                            <div class="category-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <span>QUANTS</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update question count on page load
+        window.onload = function() {
+            updateQuestionCount();
+        }
+
+        function updateQuestionCount() {
+            const questions = JSON.parse(localStorage.getItem('catQuestions')) || [];
+            const questionCount = document.getElementById('questionCount');
+            if (questionCount) {
+                questionCount.textContent = `${questions.length} Questions`;
+            }
+        }
+
+        let selectedDuration = 0;
+        let selectedQuestionCount = 0;
+
+        function showCategoryModal(duration, questionCount) {
+            selectedDuration = duration;
+            selectedQuestionCount = questionCount;
+            const modal = new bootstrap.Modal(document.getElementById('categoryModal'));
+            modal.show();
+        }
+
+        function startTestWithCategory(category) {
+            const allQuestions = JSON.parse(localStorage.getItem('catQuestions')) || [];
+            let availableQuestions = allQuestions;
+            
+            if (category !== 'ALL') {
+                availableQuestions = allQuestions.filter(q => q.category === category);
+            }
+            
+            if (availableQuestions.length < selectedQuestionCount) {
+                alert(`Not enough questions available in ${category} category. You have ${availableQuestions.length} questions available.`);
+                return;
+            }
+
+            // Clear previous test data
+            const keysToRemove = [
+                'timeLeft',
+                'lastTimerUpdate',
+                'currentQuestion',
+                'savedAnswers',
+                'testQuestions',
+                'questionTimes'
+            ];
+            
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+            });
+
+            // Randomly shuffle and select questions
+            const shuffledQuestions = [...availableQuestions]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, selectedQuestionCount);
+
+            // Store new test data
+            localStorage.setItem('testQuestions', JSON.stringify(shuffledQuestions));
+            localStorage.setItem('testDuration', selectedDuration);
+            localStorage.setItem('testCategory', category);
+            
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('categoryModal'));
+            modal.hide();
+            
+            // Navigate to test page
+            window.location.href = 'test.html';
+        }
+
+        document.getElementById('questionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const question = {
+                category: document.getElementById('category').value,
+                text: document.getElementById('question').value,
+                options: [
+                    document.getElementById('option1').value,
+                    document.getElementById('option2').value,
+                    document.getElementById('option3').value,
+                    document.getElementById('option4').value
+                ],
+                correctAnswer: parseInt(document.getElementById('correctAnswer').value) - 1
+            };
+            
+            const questions = JSON.parse(localStorage.getItem('catQuestions')) || [];
+            questions.push(question);
+            localStorage.setItem('catQuestions', JSON.stringify(questions));
+            
+            updateQuestionCount();
+            
+            Swal.fire({
+                title: 'Success!',
+                text: 'Question added successfully',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            
+            this.reset();
+        });
+
+        document.getElementById('fileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const file = document.getElementById('wordFile').files[0];
+            if (!file) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please select a file',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            try {
+                console.log('Processing file:', file.name);
+                const reader = new FileReader();
+                
+                reader.onload = async function(event) {
+                    try {
+                        console.log('File loaded, converting to HTML...');
+                        const arrayBuffer = event.target.result;
+                        
+                        // Convert Word document to HTML
+                        const result = await mammoth.convertToHtml({arrayBuffer: arrayBuffer});
+                        const html = result.value;
+                        console.log('Converted HTML:', html);
+
+                        // Parse the HTML content
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const paragraphs = doc.getElementsByTagName('p');
+                        
+                        let currentQuestion = null;
+                        let options = [];
+                        const questions = JSON.parse(localStorage.getItem('catQuestions')) || [];
+                        let questionsAdded = 0;
+                        let currentCategory = null;
+
+                        for (let i = 0; i < paragraphs.length; i++) {
+                            const text = paragraphs[i].textContent.trim();
+                            if (!text) continue;
+                            
+                            console.log('Processing paragraph:', text);
+
+                            if (text.toLowerCase().startsWith('category:')) {
+                                currentCategory = text.replace(/category:/i, '').trim().toUpperCase();
+                                console.log('Found category:', currentCategory);
+                            }
+                            else if (text.match(/^(Q[:.]|Question:)/i)) {
+                                if (currentQuestion && options.length === 4) {
+                                    questions.push(currentQuestion);
+                                    questionsAdded++;
+                                }
+                                
+                                currentQuestion = {
+                                    category: currentCategory || 'QUANTS',
+                                    text: text.replace(/^(Q[:.]\s*|Question:\s*)/i, '').trim(),
+                                    options: [],
+                                    correctAnswer: null
+                                };
+                                options = [];
+                            }
+                            else if (text.match(/^[A-D][\).]/) && currentQuestion) {
+                                const option = text.replace(/^[A-D][\).]/, '').trim();
+                                options.push(option);
+                                currentQuestion.options = options;
+                            }
+                            else if (text.match(/^(Answer|Ans)[:.]\s*[A-D]/i) && currentQuestion) {
+                                const answer = text.match(/[A-D]$/i)[0].toUpperCase();
+                                currentQuestion.correctAnswer = 'ABCD'.indexOf(answer);
+                            }
+                        }
+
+                        // Save last question if complete
+                        if (currentQuestion && options.length === 4) {
+                            questions.push(currentQuestion);
+                            questionsAdded++;
+                        }
+
+                        if (questionsAdded > 0) {
+                            localStorage.setItem('catQuestions', JSON.stringify(questions));
+                            updateQuestionCount();
+                            Swal.fire({
+                                title: 'Success!',
+                                text: `Successfully added ${questionsAdded} questions!`,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Warning!',
+                                text: 'No valid questions found in the file. Please check the format.',
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                        
+                        document.getElementById('fileForm').reset();
+                        
+                    } catch (error) {
+                        console.error('Error processing file content:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Error processing file content. Please check the file format.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                };
+
+                reader.onerror = function(error) {
+                    console.error('Error reading file:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Error reading file. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                };
+
+                reader.readAsArrayBuffer(file);
+                
+            } catch (error) {
+                console.error('Error in file upload handler:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Error uploading file. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+        async function showAlert(message, type = 'info') {
+            return await Swal.fire({
+                text: message,
+                icon: type, // 'success', 'error', 'warning', 'info', 'question'
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#1a73e8',
+                background: '#ffffff',
+                customClass: {
+                    container: 'custom-swal-container',
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    confirmButton: 'custom-swal-button'
+                }
+            });
+        }
+
+        async function showConfirm(message) {
+            const result = await Swal.fire({
+                text: message,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                confirmButtonColor: '#1a73e8',
+                cancelButtonColor: '#dc3545',
+                background: '#ffffff',
+                customClass: {
+                    container: 'custom-swal-container',
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    confirmButton: 'custom-swal-button',
+                    cancelButton: 'custom-swal-cancel-button'
+                }
+            });
+            return result.isConfirmed;
+        }
+    </script>
+</body>
+</html>
